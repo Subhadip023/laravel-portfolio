@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+:root {
+  --main-bg-color: #000000;
+  --color1: #0B60B0;
+  --color2: #40A2D8;
+  --color3: #F0EDCF;
+}
+body {
+  background-color: var(--main-bg-color);
+  color: var(--color3);
+}
+
+/* style for loader */
+
+#loader {
+  background: transparent;
+  height: 60px;
+  width: 60px;
+  position: fixed;
+  z-index: 99;
+  top: 50%;
+  left: 50%;
+  border: 5px solid rgb(217, 216, 216);
+  border-top: 5px solid var(--color3);
+  border-radius: 50%;
+  animation: loader 500ms ease-in-out infinite;
+  transition: all 200ms ease-in;
+}
+
+@keyframes loader {
+  100% {
+    rotate: 360deg;
+  }
+}
+
+.full-page {
+  padding-top: 10vh;
+  height: 87.5vh;
+  padding-bottom: 2.5vh;
+  animation: popup linear;
+  animation-timeline: view();
+  animation-range: entry 0;
+}
+
+hr {
+  margin: 40px auto;
+  height: 6px;
+  width: 500px;
+  background: var(--color2);
+  border-radius: 20px;
+}
+
+hr {
+  animation: popup 0.5s ease forwards;
+}
+
+@keyframes popup {
+  0% {
+    opacity: 0;
+    scale: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.font-normal {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 3rem;
+  padding: 15px 0;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+ul {
+  padding: 0 20px;
+}
+
+a {
+  text-decoration: none;
+}
+.ta-center {
+  text-align: center;
+}
+
+button{
+  transition: all 300ms ease-out;
+}
+
+.btn-primary {
+  background: var(--color3);
+  color: var(--color2);
+  border-radius: 10px;
+  border: none;
+}
+
+.btn-secondery {
+  background: var(--color1);
+  color: var(--color3);
+  /* border-color: transparent; */
+  border-radius: 10px;
+  border: none;
+}
+
+button:hover {
+  color: var(--main-bg-color);
+  background: var(--color2);
+}
+.hover-color-chnage {
+  transition: all 0.25s ease-in;
+}
+.hover-color-chnage:hover {
+  color: var(--color3);
+  cursor: pointer;
+}
+
+footer {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  background: var(--color1);
+  color: var(--color3);
+  padding: 10px;
+  height: 2.5vh;
+}
+
+footer:hover{
+  color: var(--color2);
+}
