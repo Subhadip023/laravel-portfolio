@@ -14,10 +14,9 @@ jobs:
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: "2a01:4f9:c014:e7ee::1"
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
           script: |
             cd /var/www/subhadip.info
             git pull origin main
