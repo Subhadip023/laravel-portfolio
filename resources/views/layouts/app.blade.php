@@ -38,7 +38,7 @@
             </a>
             <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
                 <a class="mr-5 hover:text-blue-500 {{ request()->routeIs('home') ? 'text-blue-500 font-bold' : '' }}" href="{{ route('home') }}">Home</a>
-                <a class="mr-5 hover:text-blue-500 {{ request()->routeIs('blog.*') ? 'text-blue-500 font-bold' : '' }}" href="{{ route('blog.index') }}">Blog</a>
+                <!-- <a class="mr-5 hover:text-blue-500 {{ request()->routeIs('blog.*') ? 'text-blue-500 font-bold' : '' }}" href="{{ route('blog.index') }}">Blog</a> -->
                 <a class="mr-5 hover:text-blue-500 {{ request()->routeIs('designs') ? 'text-blue-500 font-bold' : '' }}" href="{{ route('designs') }}">Designs</a>
                 <a class="mr-5 hover:text-blue-500 {{ request()->routeIs('projects') ? 'text-blue-500 font-bold' : '' }}" href="{{ route('projects') }}">Projects</a>
             </nav>
