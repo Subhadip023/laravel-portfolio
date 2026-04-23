@@ -21,3 +21,16 @@ Route::get('/designs', function () {
 Route::get('/projects', function () {
     return view('projects');
 })->name('projects');
+
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('admin');
+
+Route::get('/admin/blogs', function () {
+    return view('admin.blogs.index');
+})->name('admin.blogs.index');
+
+Route::get('/admin/blogs/create', function () {
+    return view('admin.blogs.create');
+})->name('admin.blogs.create');
+
