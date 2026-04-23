@@ -1,27 +1,31 @@
-name: Deploy Laravel App
+name: Deploy to Server
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main  # Or your specific production branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: "2a01:4f9:c014:e7ee::1"
+          host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /var/www/subhadip.info
+            cd /var/www/portfolio
             git pull origin main
-            composer install --no-interaction --prefer-dist --optimize-autoloader
+            
+            # For Laravel specific tasks:
+            composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
+            php artisan view:cache
