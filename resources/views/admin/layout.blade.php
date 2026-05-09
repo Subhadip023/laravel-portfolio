@@ -99,6 +99,12 @@
                     <i class="fas fa-cog w-5 text-center"></i>
                     Settings
                 </a>
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="w-full sidebar-item flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+                    </button>
+                </form>
             </nav>
         </div>
     </aside>
@@ -140,7 +146,7 @@
                 <!-- User Profile -->
                 <div class="flex items-center gap-3 cursor-pointer group">
                     <div class="text-right hidden sm:block">
-                        <p class="text-sm font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">John Doe</p>
+                        <p class="text-sm font-semibold text-gray-700 group-hover:text-indigo-600 transition-colors">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500">Administrator</p>
                     </div>
                     <div class="relative">

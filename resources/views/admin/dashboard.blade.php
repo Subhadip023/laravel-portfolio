@@ -5,7 +5,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
     <div>
         <h2 class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
-        <p class="text-sm text-gray-500 mt-1">Welcome back, John! Here's what's happening today.</p>
+        <p class="text-sm text-gray-500 mt-1">Welcome back, Subhadip! Here's what's happening today.</p>
     </div>
     <div class="flex gap-2">
         <button class="px-4 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm">
@@ -14,6 +14,7 @@
         <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
             <i class="fas fa-plus mr-2"></i> New Project
         </button>
+
     </div>
 </div>
 

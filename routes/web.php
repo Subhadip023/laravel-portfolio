@@ -3,14 +3,13 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,18 +38,25 @@ Route::get('/projects', function () {
     return view('projects');
 })->name('projects');
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->name('admin');
 
-Route::get('/admin/blogs', function () {
-    return view('admin.blogs.index');
-})->name('admin.blogs.index');
+// admin routes 
 
-Route::get('/admin/blogs/create', function () {
-    return view('admin.blogs.create');
-})->name('admin.blogs.create');
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin');
+
+    Route::get('/blogs', function () {
+        return view('admin.blogs.index');
+    })->name('admin.blogs.index');
+
+    Route::get('/blogs/create', function () {
+        return view('admin.blogs.create');
+    })->name('admin.blogs.create');
+});
 
 
 
-require __DIR__.'/auth.php';
+
+
+require __DIR__ . '/auth.php';
