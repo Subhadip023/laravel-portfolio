@@ -46,13 +46,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin');
 
-    Route::get('/blogs', function () {
-        return view('admin.blogs.index');
-    })->name('admin.blogs.index');
-
-    Route::get('/blogs/create', function () {
-        return view('admin.blogs.create');
-    })->name('admin.blogs.create');
+    Route::get('/blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('admin.blogs.index');
+    Route::get('/blogs/create', [\App\Http\Controllers\BlogController::class, 'create'])->name('admin.blogs.create');
+    Route::post('/blogs', [\App\Http\Controllers\BlogController::class, 'store'])->name('admin.blogs.store');
 });
 
 
