@@ -23,6 +23,5 @@ yarn-error.log
 /.zed
 
 old_codes/
-projects/
 composer.lock
 package-lock.json
