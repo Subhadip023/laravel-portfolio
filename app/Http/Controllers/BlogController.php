@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -39,7 +41,10 @@ class BlogController extends Controller
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('blogs', 'public');
+        } elseif ($request->filled('image_url')) {
+            $imagePath = $validated['image_url'];
         }
+
         $blog = Blog::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
@@ -60,7 +65,7 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+        return view('blog.show', compact('blog'));
     }
 
     /**
@@ -68,7 +73,9 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.blogs.edit', compact('blog', 'categories', 'tags'));
     }
 
     /**
@@ -76,7 +83,36 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        //
+        $validated = $request->validated();
+
+        $data = [
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'status' => $validated['status'],
+            'category_id' => $validated['category_id'] ?? null,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($blog->image && !Str::startsWith($blog->image, ['http://', 'https://'])) {
+                Storage::disk('public')->delete($blog->image);
+            }
+            $data['image'] = $request->file('image')->store('blogs', 'public');
+        } elseif ($request->filled('image_url')) {
+            if ($blog->image && !Str::startsWith($blog->image, ['http://', 'https://'])) {
+                Storage::disk('public')->delete($blog->image);
+            }
+            $data['image'] = $validated['image_url'];
+        }
+
+        $blog->update($data);
+
+        if (isset($validated['tags'])) {
+            $blog->tags()->sync($validated['tags']);
+        } else {
+            $blog->tags()->detach();
+        }
+
+        return redirect()->route('admin.blogs.index')->with('success', 'Blog updated successfully.');
     }
 
     /**
@@ -84,6 +120,12 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        if ($blog->image && !Str::startsWith($blog->image, ['http://', 'https://'])) {
+            Storage::disk('public')->delete($blog->image);
+        }
+        $blog->tags()->detach();
+        $blog->delete();
+
+        return redirect()->route('admin.blogs.index')->with('success', 'Blog deleted successfully.');
     }
 }

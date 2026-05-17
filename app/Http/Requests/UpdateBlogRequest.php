@@ -11,7 +11,7 @@ class UpdateBlogRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'status' => 'required|in:1,2,3',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image_url' => 'nullable|url',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ];
     }
 }

@@ -67,9 +67,13 @@
                     <td class="px-6 py-4 text-gray-600">{{ $blog->views }}</td>
                     <td class="px-6 py-4 text-gray-600">{{ $blog->likes }}</td>
                     <td class="px-6 py-4 text-gray-500">{{ $blog->created_at->format('M d, Y') }}</td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-gray-400 hover:text-indigo-600 mr-2 transition-colors" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button class="text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                    <td class="px-6 py-4 text-right flex justify-end gap-2 items-center">
+                        <a href="{{ route('admin.blogs.edit', $blog) }}" class="text-gray-400 hover:text-indigo-600 transition-colors" title="Edit"><i class="fas fa-edit"></i></a>
+                        <form action="{{ route('admin.blogs.destroy', $blog) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this blog post?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                        </form>
                     </td>
                 </tr>
                 @empty

@@ -76,6 +76,14 @@
                     <i class="fas fa-tags w-5 text-center"></i>
                     Tags
                 </a>
+                <a href="{{ route('admin.designs.index') }}" class="sidebar-item {{ request()->routeIs('admin.designs.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-palette w-5 text-center"></i>
+                    Designs
+                </a>
+                <a href="{{ route('admin.projects.index') }}" class="sidebar-item {{ request()->routeIs('admin.projects.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-project-diagram w-5 text-center"></i>
+                    Projects
+                </a>
             </nav>
 
             <div class="px-4 mt-8 mb-2">

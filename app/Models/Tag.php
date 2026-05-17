@@ -12,4 +12,14 @@ class Tag extends Model
     {
         return $this->belongsToMany(Blog::class);
     }
+
+    public function designs()
+    {
+        return $this->belongsToMany(Design::class);
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
 }

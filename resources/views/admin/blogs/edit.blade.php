@@ -14,8 +14,8 @@
 <!-- Page Header -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
     <div>
-        <h2 class="text-2xl font-bold text-gray-800">Create New Blog</h2>
-        <p class="text-sm text-gray-500 mt-1">Write an amazing new article for your readers.</p>
+        <h2 class="text-2xl font-bold text-gray-800">Edit Blog Post</h2>
+        <p class="text-sm text-gray-500 mt-1">Update your existing article content and settings.</p>
     </div>
     <div class="flex gap-2">
         <a href="{{ route('admin.blogs.index') }}" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors shadow-sm inline-flex items-center">
@@ -24,14 +24,15 @@
     </div>
 </div>
 
-<form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<form action="{{ route('admin.blogs.update', $blog) }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
     @csrf
+    @method('PUT')
     <!-- Main Form Area -->
     <div class="lg:col-span-2">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Blog Title <span class="text-red-500">*</span></label>
-                    <input type="text" name="title" value="{{ old('title') }}" placeholder="e.g. 10 Laravel Tips & Tricks for 2026" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                    <input type="text" name="title" value="{{ old('title', $blog->title) }}" placeholder="e.g. 10 Laravel Tips & Tricks for 2026" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
                     @error('title')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -56,9 +57,9 @@
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Content <span class="text-red-500">*</span></label>
                     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
-                        <div id="quill-editor" style="height: 350px;">{!! old('content') !!}</div>
+                        <div id="quill-editor" style="height: 350px;">{!! old('content', $blog->content) !!}</div>
                     </div>
-                    <input type="hidden" name="content" id="hidden-content" value="{{ old('content') }}">
+                    <input type="hidden" name="content" id="hidden-content" value="{{ old('content', $blog->content) }}">
                     @error('content')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -76,8 +77,8 @@
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select name="status" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Draft (Private)</option>
-                    <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>Published (Public)</option>
+                    <option value="1" {{ old('status', $blog->status) == '1' ? 'selected' : '' }}>Draft (Private)</option>
+                    <option value="2" {{ old('status', $blog->status) == '2' ? 'selected' : '' }}>Published (Public)</option>
                 </select>
                 @error('status')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -91,7 +92,7 @@
 
             <div class="flex gap-3">
                 <button type="submit" class="w-full py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200">
-                    Save Blog
+                    Update Blog
                 </button>
             </div>
         </div>
@@ -105,7 +106,7 @@
                 <select name="category_id" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">Select a category...</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
                 </select>
                 @error('category_id')
@@ -118,7 +119,7 @@
                 <div class="flex flex-wrap gap-2">
                     @foreach($tags as $tag)
                         <label class="inline-flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-100 transition-colors">
-                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" {{ is_array(old('tags')) && in_array($tag->id, old('tags')) ? 'checked' : '' }}>
+                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" {{ (is_array(old('tags')) && in_array($tag->id, old('tags'))) || (!is_array(old('tags')) && $blog->tags->contains($tag->id)) ? 'checked' : '' }}>
                             <span class="ml-2 text-sm text-gray-700">{{ $tag->name }}</span>
                         </label>
                     @endforeach
@@ -137,15 +138,15 @@
             <div id="image-preview-container" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer group relative overflow-hidden h-48 flex flex-col justify-center mb-4">
                 <input type="file" name="image" id="image-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*" onchange="previewImage(event)">
                 
-                <div id="upload-placeholder" class="z-10 relative pointer-events-none">
+                <div id="upload-placeholder" class="z-10 relative pointer-events-none {{ $blog->image ? 'hidden' : '' }}">
                     <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                         <i class="fas fa-cloud-upload-alt text-xl"></i>
                     </div>
-                    <p class="text-sm font-medium text-gray-700 mb-1">Click to upload image</p>
+                    <p class="text-sm font-medium text-gray-700 mb-1">Click to upload new image</p>
                     <p class="text-xs text-gray-500">PNG, JPG or WEBP up to 2MB</p>
                 </div>
 
-                <img id="image-preview" src="#" alt="Preview" class="hidden absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none">
+                <img id="image-preview" src="{{ $blog->image ? (Str::startsWith($blog->image, ['http://', 'https://']) ? $blog->image : asset('storage/' . $blog->image)) : '#' }}" alt="Preview" class="{{ $blog->image ? '' : 'hidden' }} absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none">
             </div>
             @error('image')
                 <p class="text-red-500 text-xs mt-1 mb-2">{{ $message }}</p>
@@ -153,7 +154,7 @@
 
             <div class="pt-4 border-t border-gray-100">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Or Provide Image URL</label>
-                <input type="url" name="image_url" value="{{ old('image_url') }}" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                <input type="url" name="image_url" value="{{ old('image_url', (isset($blog) && Str::startsWith($blog->image, ['http://', 'https://'])) ? $blog->image : '') }}" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
                 <p class="text-xs text-gray-400 mt-1.5">If both file and URL are provided, the uploaded file takes priority.</p>
                 @error('image_url')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

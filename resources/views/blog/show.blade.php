@@ -7,7 +7,7 @@
     <section class="text-gray-600 body-font">
         <div class="container mx-auto flex px-5 py-12 items-center justify-center flex-col">
             @if($blog->image)
-            <img class="lg:w-2/3 w-full mb-10 object-cover object-center rounded-lg shadow-md" alt="{{ $blog->title }}" src="{{ asset('storage/' . $blog->image) }}">
+            <img class="lg:w-2/3 w-full mb-10 object-cover object-center rounded-lg shadow-md" alt="{{ $blog->title }}" src="{{ Str::startsWith($blog->image, ['http://', 'https://']) ? $blog->image : asset('storage/' . $blog->image) }}">
             @else
             <img class="lg:w-2/3 w-full mb-10 object-cover object-center rounded-lg shadow-md" alt="{{ $blog->title }}" src="https://dummyimage.com/1200x600/3b82f6/ffffff&text={{ urlencode($blog->title) }}">
             @endif
