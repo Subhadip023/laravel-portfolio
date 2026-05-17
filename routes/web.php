@@ -49,6 +49,11 @@ Route::get('/projects', function () {
     return view('projects', compact('projects'));
 })->name('projects');
 
+Route::get('/projects/{project}', function (\App\Models\Project $project) {
+    if ($project->status != '2') abort(404);
+    return view('projects.show', compact('project'));
+})->name('projects.show');
+
 
 // admin routes 
 

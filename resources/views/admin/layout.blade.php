@@ -174,13 +174,13 @@
         </header>
 
         <!-- Main Content Area content -->
-        <main class="flex-1 overflow-y-auto overflow-x-hidden relative bg-gray-50/50">
-            <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto pb-15">
+        <main class="flex-1 overflow-y-auto overflow-x-hidden relative bg-gray-50/50 pb-20">
+            <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
                 @yield('content')
             </div>
             
             <!-- Footer -->
-            <footer class="mt-auto px-6 py-4 border-t border-gray-200 text-center text-sm text-gray-500">
+            <footer class="px-6 py-3 border-t border-gray-200 text- text-sm text-gray-500 fixed bottom-0 w-full h-fit z-50 bg-gray-100">
                 <p>&copy; 2026 AdminPanel Pro. All rights reserved.</p>
             </footer>
         </main>

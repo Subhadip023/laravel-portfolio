@@ -1,5 +1,15 @@
 @extends('admin.layout')
 
+@push('styles')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+    .ql-toolbar.ql-snow { border: none; border-bottom: 1px solid #e5e7eb; background: #f9fafb; padding: 12px; }
+    .ql-container.ql-snow { border: none; font-family: 'Inter', sans-serif; font-size: 0.875rem; }
+    .ql-editor { color: #374151; padding: 1rem; }
+    .ql-editor.ql-blank::before { color: #9ca3af; font-style: normal; }
+</style>
+@endpush
+
 @section('content')
 <!-- Page Header -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -52,9 +62,12 @@
                 </div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Description <span class="text-red-500">*</span></label>
-                <textarea name="description" rows="4" placeholder="A comprehensive description of your project..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">{{ old('description') }}</textarea>
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
+                    <div id="quill-editor" style="height: 350px;">{!! old('description') !!}</div>
+                </div>
+                <input type="hidden" name="description" id="hidden-description" value="{{ old('description') }}">
                 @error('description')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -134,7 +147,44 @@
 </form>
 
 @push('scripts')
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            placeholder: 'Write a comprehensive description of your project here...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+
+        var descriptionInput = document.querySelector('#hidden-description');
+        
+        quill.on('text-change', function() {
+            var html = quill.root.innerHTML;
+            if (html === '<p><br></p>') html = '';
+            descriptionInput.value = html;
+        });
+
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                var html = quill.root.innerHTML;
+                if (html === '<p><br></p>') html = '';
+                descriptionInput.value = html;
+            });
+        }
+    });
+
     function previewImage(event) {
         var reader = new FileReader();
         reader.onload = function() {

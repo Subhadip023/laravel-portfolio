@@ -37,7 +37,10 @@
                         @endif
                         <h3 class="tracking-widest text-blue-500 text-xs font-medium title-font uppercase">{{ $project->subtitle ?? 'WEB APPLICATION' }}</h3>
                         <h2 class="text-xl text-gray-900 font-semibold title-font mb-3">{{ $project->title }}</h2>
-                        <p class="leading-relaxed text-base mb-6 text-gray-600">{{ $project->description }}</p>
+                        <p class="leading-relaxed text-base mb-4 text-gray-600">{{ Str::limit(strip_tags($project->description), 150) }}</p>
+                        <a href="{{ route('projects.show', $project) }}" class="text-blue-600 hover:text-blue-700 font-semibold text-sm inline-flex items-center gap-1 mb-4">
+                            Learn More <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
                     </div>
                     
                     <div class="mt-auto space-y-4">
