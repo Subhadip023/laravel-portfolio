@@ -1,5 +1,15 @@
 @extends('admin.layout')
 
+@push('styles')
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+    .ql-toolbar.ql-snow { border: none; border-bottom: 1px solid #e5e7eb; background: #f9fafb; padding: 12px; }
+    .ql-container.ql-snow { border: none; font-family: 'Inter', sans-serif; font-size: 0.875rem; }
+    .ql-editor { color: #374151; padding: 1rem; }
+    .ql-editor.ql-blank::before { color: #9ca3af; font-style: normal; }
+</style>
+@endpush
+
 @section('content')
 <!-- Page Header -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
@@ -44,17 +54,11 @@
                 </div>
 
                 <div class="mb-6">
-                    <div class="flex justify-between items-end mb-2">
-                        <label class="block text-sm font-semibold text-gray-700">Content <span class="text-red-500">*</span></label>
-                        <div class="flex gap-2">
-                            <button type="button" class="text-gray-400 hover:text-indigo-600 transition-colors p-1" title="Bold"><i class="fas fa-bold"></i></button>
-                            <button type="button" class="text-gray-400 hover:text-indigo-600 transition-colors p-1" title="Italic"><i class="fas fa-italic"></i></button>
-                            <button type="button" class="text-gray-400 hover:text-indigo-600 transition-colors p-1" title="Link"><i class="fas fa-link"></i></button>
-                            <button type="button" class="text-gray-400 hover:text-indigo-600 transition-colors p-1" title="Image"><i class="fas fa-image"></i></button>
-                            <button type="button" class="text-gray-400 hover:text-indigo-600 transition-colors p-1" title="Code"><i class="fas fa-code"></i></button>
-                        </div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Content <span class="text-red-500">*</span></label>
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
+                        <div id="quill-editor" style="height: 350px;">{!! old('content') !!}</div>
                     </div>
-                    <textarea name="content" rows="15" placeholder="Write your awesome content here..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all font-mono">{{ old('content') }}</textarea>
+                    <input type="hidden" name="content" id="hidden-content" value="{{ old('content') }}">
                     @error('content')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
@@ -98,19 +102,31 @@
             
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select name="category_id" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">Select a category...</option>
-                    <option value="web-dev">Web Development</option>
-                    <option value="design">Design</option>
-                    <option value="personal">Personal</option>
-                    <option value="tutorial">Tutorial</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
                 </select>
+                @error('category_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                <input type="text" placeholder="Laravel, PHP, Web..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <p class="text-xs text-gray-400 mt-1.5">Separate tags with commas.</p>
+                <div class="flex flex-wrap gap-2">
+                    @foreach($tags as $tag)
+                        <label class="inline-flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-100 transition-colors">
+                            <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" {{ is_array(old('tags')) && in_array($tag->id, old('tags')) ? 'checked' : '' }}>
+                            <span class="ml-2 text-sm text-gray-700">{{ $tag->name }}</span>
+                        </label>
+                    @endforeach
+                </div>
+                <p class="text-xs text-gray-400 mt-1.5">Select applicable tags.</p>
+                @error('tags')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
         </div>
 
@@ -118,13 +134,18 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 class="font-bold text-gray-800 border-b border-gray-100 pb-3 mb-4">Featured Image</h3>
             
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer group relative">
-                <input type="file" name="image" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-cloud-upload-alt text-xl"></i>
+            <div id="image-preview-container" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer group relative overflow-hidden h-48 flex flex-col justify-center">
+                <input type="file" name="image" id="image-upload" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" accept="image/*" onchange="previewImage(event)">
+                
+                <div id="upload-placeholder" class="z-10 relative pointer-events-none">
+                    <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cloud-upload-alt text-xl"></i>
+                    </div>
+                    <p class="text-sm font-medium text-gray-700 mb-1">Click to upload image</p>
+                    <p class="text-xs text-gray-500">PNG, JPG or WEBP up to 2MB</p>
                 </div>
-                <p class="text-sm font-medium text-gray-700 mb-1">Click to upload image</p>
-                <p class="text-xs text-gray-500">PNG, JPG or WEBP up to 2MB</p>
+
+                <img id="image-preview" src="#" alt="Preview" class="hidden absolute inset-0 w-full h-full object-cover rounded-lg z-10 pointer-events-none">
             </div>
             @error('image')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -133,4 +154,61 @@
 
     </div>
 </form>
+
+@push('scripts')
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            placeholder: 'Write your awesome content here...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+
+        var contentInput = document.querySelector('#hidden-content');
+        
+        // Sync the hidden input on every text change
+        quill.on('text-change', function() {
+            var html = quill.root.innerHTML;
+            if (html === '<p><br></p>') html = '';
+            contentInput.value = html;
+        });
+
+        // Also sync right before submit as a fallback
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                var html = quill.root.innerHTML;
+                if (html === '<p><br></p>') html = '';
+                contentInput.value = html;
+            });
+        }
+    });
+
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('image-preview');
+            var placeholder = document.getElementById('upload-placeholder');
+            output.src = reader.result;
+            output.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+        }
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>
+@endpush
 @endsection

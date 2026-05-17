@@ -17,5 +17,16 @@ class Blog extends Model
         'image',
         'views',
         'likes',
+        'category_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

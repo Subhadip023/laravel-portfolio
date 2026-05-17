@@ -22,12 +22,22 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/blog', function () {
-    return view('blog.index');
+Route::get('/blog', function (\Illuminate\Http\Request $request) {
+    $query = \App\Models\Blog::where('status', '1');
+    
+    if ($request->has('id')) {
+        $query->where('category_id', $request->id);
+    }
+    
+    $blogs = $query->latest()->get();
+    $categories = \App\Models\Category::all();
+    
+    return view('blog.index', compact('blogs', 'categories'));
 })->name('blog.index');
 
-Route::get('/blog/{id}', function ($id) {
-    return view('blog.show', ['id' => $id]);
+Route::get('/blog/{blog}', function (\App\Models\Blog $blog) {
+    // Optionally check if published: if ($blog->status != '1') abort(404);
+    return view('blog.show', compact('blog'));
 })->name('blog.show');
 
 Route::get('/designs', function () {
@@ -49,6 +59,14 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('admin.blogs.index');
     Route::get('/blogs/create', [\App\Http\Controllers\BlogController::class, 'create'])->name('admin.blogs.create');
     Route::post('/blogs', [\App\Http\Controllers\BlogController::class, 'store'])->name('admin.blogs.store');
+
+    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::put('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'update'])->name('admin.categories.update');
+
+    Route::get('/tags', [\App\Http\Controllers\TagController::class, 'index'])->name('admin.tags.index');
+    Route::post('/tags', [\App\Http\Controllers\TagController::class, 'store'])->name('admin.tags.store');
+    Route::put('/tags/{tag}', [\App\Http\Controllers\TagController::class, 'update'])->name('admin.tags.update');
 });
 
 

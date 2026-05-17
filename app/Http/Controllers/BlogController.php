@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
+use App\Models\Category;
+use App\Models\Tag;
 
 class BlogController extends Controller
 {
@@ -22,7 +24,9 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('admin.blogs.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.blogs.create', compact('categories', 'tags'));
     }
 
     /**
@@ -36,12 +40,17 @@ class BlogController extends Controller
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('blogs', 'public');
         }
-        Blog::create([
+        $blog = Blog::create([
             'title' => $validated['title'],
             'content' => $validated['content'],
             'status' => $validated['status'],
             'image' => $imagePath,
+            'category_id' => $validated['category_id'] ?? null,
         ]);
+
+        if (isset($validated['tags'])) {
+            $blog->tags()->sync($validated['tags']);
+        }
 
         return redirect()->route('admin.blogs.index')->with('success', 'Blog created successfully.');
     }

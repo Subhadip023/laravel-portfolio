@@ -10,6 +10,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles Stack -->
+    @stack('styles')
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -64,9 +68,13 @@
                     <i class="fas fa-blog w-5 text-center"></i>
                     Blogs
                 </a>
-                <a href="#" class="sidebar-item flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
-                    <i class="fas fa-shopping-cart w-5 text-center"></i>
-                    E-Commerce
+                <a href="{{ route('admin.categories.index') }}" class="sidebar-item {{ request()->routeIs('admin.categories.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-folder w-5 text-center"></i>
+                    Categories
+                </a>
+                <a href="{{ route('admin.tags.index') }}" class="sidebar-item {{ request()->routeIs('admin.tags.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-tags w-5 text-center"></i>
+                    Tags
                 </a>
             </nav>
 
@@ -159,7 +167,7 @@
 
         <!-- Main Content Area content -->
         <main class="flex-1 overflow-y-auto overflow-x-hidden relative bg-gray-50/50">
-            <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+            <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto pb-15">
                 @yield('content')
             </div>
             
@@ -170,5 +178,7 @@
         </main>
     </div>
 
+    <!-- Scripts -->
+    @stack('scripts')
 </body>
 </html>
