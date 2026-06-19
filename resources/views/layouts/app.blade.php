@@ -4,8 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Subhadip Chakraborty is a Laravel Developer with professional experience building scalable backend systems, SAML authentication, and Gen AI–powered semantic search for production applications serving 1,000+ users.">
-    <meta name="google-site-verification" content="RlRxry4zP_xFTq_AfDs6s3rGl0yKW7ahsy0fJV0Pphg" />
+    @hasSection('seo')
+        @yield('seo')
+    @else
+        <meta name="description" content="Subhadip Chakraborty is a Laravel Developer with professional experience building scalable backend systems, SAML authentication, and Gen AI–powered semantic search for production applications serving 1,000+ users.">
+        <meta name="google-site-verification" content="RlRxry4zP_xFTq_AfDs6s3rGl0yKW7ahsy0fJV0Pphg" />
+    @endif
     <link rel="icon" href="{{ asset('assets/icon.png') }}" type="image/icon type">
     
     <title>@yield('title', 'Subhadip Chakraborty | Laravel Developer & Backend Engineer')</title>

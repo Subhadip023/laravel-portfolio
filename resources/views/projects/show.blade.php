@@ -2,7 +2,7 @@
 
 @section('title', ($project->meta_title ?: $project->title) . ' | Subhadip Chakraborty')
 
-@section('head')
+@section('seo')
 <meta name="description" content="{{ $project->meta_description ?: Str::limit(strip_tags($project->description), 160) }}">
 @if($project->meta_keywords)
 <meta name="keywords" content="{{ $project->meta_keywords }}">
