@@ -16,7 +16,7 @@
                 </p>
                 <div class="flex flex-wrap gap-2">
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">Full Stack</span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">Laravel & Vue</span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">Laravel </span>
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-teal-100 text-teal-800">APIs & Microservices</span>
                 </div>
             </div>
