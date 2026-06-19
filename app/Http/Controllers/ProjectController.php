@@ -32,13 +32,16 @@ class ProjectController extends Controller
         }
 
         $project = Project::create([
-            'title' => $validated['title'],
-            'subtitle' => $validated['subtitle'] ?? null,
-            'description' => $validated['description'],
-            'image' => $imagePath,
-            'url' => $validated['url'] ?? null,
-            'github_url' => $validated['github_url'] ?? null,
-            'status' => $validated['status'],
+            'title'            => $validated['title'],
+            'subtitle'         => $validated['subtitle'] ?? null,
+            'description'      => $validated['description'],
+            'image'            => $imagePath,
+            'url'              => $validated['url'] ?? null,
+            'github_url'       => $validated['github_url'] ?? null,
+            'status'           => $validated['status'],
+            'meta_title'       => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'meta_keywords'    => $validated['meta_keywords'] ?? null,
         ]);
 
         if (isset($validated['tags'])) {
@@ -59,12 +62,15 @@ class ProjectController extends Controller
         $validated = $request->validated();
 
         $data = [
-            'title' => $validated['title'],
-            'subtitle' => $validated['subtitle'] ?? null,
-            'description' => $validated['description'],
-            'url' => $validated['url'] ?? null,
-            'github_url' => $validated['github_url'] ?? null,
-            'status' => $validated['status'],
+            'title'            => $validated['title'],
+            'subtitle'         => $validated['subtitle'] ?? null,
+            'description'      => $validated['description'],
+            'url'              => $validated['url'] ?? null,
+            'github_url'       => $validated['github_url'] ?? null,
+            'status'           => $validated['status'],
+            'meta_title'       => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+            'meta_keywords'    => $validated['meta_keywords'] ?? null,
         ];
 
         if ($request->hasFile('image')) {

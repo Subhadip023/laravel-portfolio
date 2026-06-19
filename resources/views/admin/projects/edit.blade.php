@@ -144,6 +144,38 @@
             @enderror
         </div>
 
+        <!-- SEO Metadata -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 class="font-bold text-gray-800 border-b border-gray-100 pb-3 mb-4">SEO Metadata</h3>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Meta Title</label>
+                <input type="text" name="meta_title" value="{{ old('meta_title', $project->meta_title) }}"
+                    placeholder="Defaults to project title if empty"
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                <p class="text-xs text-gray-400 mt-1">Max 255 chars. Recommended ≤ 60.</p>
+                @error('meta_title')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Meta Description</label>
+                <textarea name="meta_description" rows="3"
+                    placeholder="Short page summary for search engines..."
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all resize-none">{{ old('meta_description', $project->meta_description) }}</textarea>
+                <p class="text-xs text-gray-400 mt-1">Max 500 chars. Recommended ≤ 160.</p>
+                @error('meta_description')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5">Meta Keywords</label>
+                <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $project->meta_keywords) }}"
+                    placeholder="laravel, portfolio, backend"
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all">
+                <p class="text-xs text-gray-400 mt-1">Comma-separated keywords.</p>
+                @error('meta_keywords')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+            </div>
+        </div>
+
     </div>
 </form>
 

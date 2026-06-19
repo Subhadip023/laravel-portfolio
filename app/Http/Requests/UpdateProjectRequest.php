@@ -23,6 +23,9 @@ class UpdateProjectRequest extends FormRequest
             'status' => 'required|in:1,2,3',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'meta_keywords' => 'nullable|string|max:255',
         ];
     }
 }

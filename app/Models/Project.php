@@ -14,6 +14,9 @@ class Project extends Model
         'url',
         'github_url',
         'status',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
 
     public function tags()

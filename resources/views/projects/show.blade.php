@@ -1,6 +1,25 @@
 @extends('layouts.app')
 
-@section('title', $project->title . ' | Subhadip Chakraborty')
+@section('title', ($project->meta_title ?: $project->title) . ' | Subhadip Chakraborty')
+
+@section('head')
+<meta name="description" content="{{ $project->meta_description ?: Str::limit(strip_tags($project->description), 160) }}">
+@if($project->meta_keywords)
+<meta name="keywords" content="{{ $project->meta_keywords }}">
+@endif
+{{-- Open Graph --}}
+<meta property="og:title" content="{{ $project->meta_title ?: $project->title }}">
+<meta property="og:description" content="{{ $project->meta_description ?: Str::limit(strip_tags($project->description), 160) }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ url()->current() }}">
+@if($project->image)
+<meta property="og:image" content="{{ Str::startsWith($project->image, ['http://', 'https://']) ? $project->image : asset('storage/' . $project->image) }}">
+@endif
+{{-- Twitter Card --}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $project->meta_title ?: $project->title }}">
+<meta name="twitter:description" content="{{ $project->meta_description ?: Str::limit(strip_tags($project->description), 160) }}">
+@endsection
 
 @section('content')
 <main class="flex-grow pt-20 pb-20 min-h-screen bg-gray-50">
