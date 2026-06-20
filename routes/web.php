@@ -84,6 +84,8 @@ Route::get('/projects/{project}', function (\App\Models\Project $project) {
     return view('projects.show', compact('project'));
 })->name('projects.show');
 
+Route::get('/resume/{resume?}', [\App\Http\Controllers\ResumeController::class, 'showPublic'])->name('resume.show');
+
 
 // admin routes 
 
@@ -91,6 +93,15 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('admin');
+
+    // Resume Management
+    Route::get('/resumes', [\App\Http\Controllers\ResumeController::class, 'index'])->name('admin.resumes.index');
+    Route::get('/resumes/create', [\App\Http\Controllers\ResumeController::class, 'create'])->name('admin.resumes.create');
+    Route::post('/resumes', [\App\Http\Controllers\ResumeController::class, 'store'])->name('admin.resumes.store');
+    Route::get('/resumes/{resume}/edit', [\App\Http\Controllers\ResumeController::class, 'edit'])->name('admin.resumes.edit');
+    Route::put('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'update'])->name('admin.resumes.update');
+    Route::delete('/resumes/{resume}', [\App\Http\Controllers\ResumeController::class, 'destroy'])->name('admin.resumes.destroy');
+    Route::post('/resumes/{resume}/toggle-active', [\App\Http\Controllers\ResumeController::class, 'toggleActive'])->name('admin.resumes.toggle-active');
 
     Route::get('/blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('admin.blogs.index');
     Route::get('/blogs/create', [\App\Http\Controllers\BlogController::class, 'create'])->name('admin.blogs.create');

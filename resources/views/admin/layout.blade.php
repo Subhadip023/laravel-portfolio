@@ -96,6 +96,10 @@
                     <i class="fas fa-icons w-5 text-center"></i>
                     Icon Library
                 </a>
+                <a href="{{ route('admin.resumes.index') }}" class="sidebar-item {{ request()->routeIs('admin.resumes.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-file-alt w-5 text-center"></i>
+                    Resumes
+                </a>
             </nav>
 
             <div class="px-4 mt-8 mb-2">

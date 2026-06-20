@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(IconSeeder::class);
+        $this->call(ResumeSeeder::class);
     }
 }
