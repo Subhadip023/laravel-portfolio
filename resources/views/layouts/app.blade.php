@@ -74,7 +74,7 @@
                 © 2026 Chakraborty —
                 <a href="https://twitter.com/Subhadi51529132" class="text-gray-600 ml-1" target="_blank"
                     rel="noopener noreferrer">
-                    @Subhadi51529132
+                    @subhadipdev
                 </a>
                 <span class="mx-2">•</span>
                 <a href="https://github.com/subhadip023" class="text-gray-600" target="_blank" rel="noopener noreferrer">
