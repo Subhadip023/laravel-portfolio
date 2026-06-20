@@ -57,7 +57,7 @@
         </div>
     </header>
 
-    <main class="min-h-screen mb-15">
+    <main class="min-h-screen">
         @yield('content')
     </main>
 
