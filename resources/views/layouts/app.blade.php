@@ -72,7 +72,7 @@
             </a>
             <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
                 © 2026 Chakraborty —
-                <a href="https://twitter.com/Subhadi51529132" class="text-gray-600 ml-1" target="_blank"
+                <a href="https://twitter.com/subhadipdev" class="text-gray-600 ml-1" target="_blank"
                     rel="noopener noreferrer">
                     @subhadipdev
                 </a>

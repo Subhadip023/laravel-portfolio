@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HeroSettingController;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/dashboard', function () {
@@ -19,7 +21,16 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/', function () {
-    return view('index');
+    $hero = [
+        'name'           => Setting::get('hero_name', 'Subhadip'),
+        'title'          => Setting::get('hero_title', 'Laravel Developer'),
+        'bio'            => Setting::get('hero_bio', ''),
+        'tagline'        => Setting::get('hero_tagline', ''),
+        'email'          => Setting::get('hero_email', 'subhadip240420@gmail.com'),
+        'projects_label' => Setting::get('hero_projects_label', 'View Projects'),
+        'contact_label'  => Setting::get('hero_contact_label', 'Contact Me'),
+    ];
+    return view('index', compact('hero'));
 })->name('home');
 
 Route::get('/blog', function (\Illuminate\Http\Request $request) {
@@ -90,6 +101,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/projects/{project}/edit', [\App\Http\Controllers\ProjectController::class, 'edit'])->name('admin.projects.edit');
     Route::put('/projects/{project}', [\App\Http\Controllers\ProjectController::class, 'update'])->name('admin.projects.update');
     Route::delete('/projects/{project}', [\App\Http\Controllers\ProjectController::class, 'destroy'])->name('admin.projects.destroy');
+
+    // Hero Section Settings
+    Route::get('/hero', [HeroSettingController::class, 'edit'])->name('admin.hero.edit');
+    Route::put('/hero', [HeroSettingController::class, 'update'])->name('admin.hero.update');
 });
 
 

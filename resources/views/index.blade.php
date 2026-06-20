@@ -13,31 +13,32 @@
         <div class="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center">
 
             <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-                Hi, I'm <span class="text-blue-600">Subhadip</span><br class="hidden lg:inline-block">
-                <span class="text-gray-800">Laravel Developer</span>
+                Hi, I'm <span class="text-blue-600">{{ $hero['name'] }}</span><br class="hidden lg:inline-block">
+                <span class="text-gray-800">{{ $hero['title'] }}</span>
             </h1>
 
+            @if($hero['bio'])
             <p class="mb-6 leading-relaxed text-gray-600">
-                I am a Laravel Developer with professional experience since <strong>November 2024</strong> at
-                <strong>Matainja Technologies</strong>. I have worked on multiple production projects, including
-                implementing <strong>SAML authentication</strong> and integrating
-                <strong>Gen AI–based semantic search</strong> in a live application serving
-                <strong>1,000+ users</strong>. My role also includes Linux-based deployment, mentoring junior developers,
-                and collaborating directly with clients to build scalable backend systems.
+                {!! nl2br(e($hero['bio'])) !!}
             </p>
+            @endif
 
+            @if($hero['tagline'])
             <p class="mb-8 leading-relaxed text-gray-600">
-                Currently focused on developing efficient backend systems and modern frontend experiences.
+                {{ $hero['tagline'] }}
             </p>
+            @endif
 
             <div class="flex justify-center md:justify-start">
                 <a href="{{ route('projects') }}" class="inline-flex text-white bg-blue-500 py-2 px-6 hover:bg-blue-600 rounded text-lg">
-                    View Projects
+                    {{ $hero['projects_label'] }}
                 </a>
-                <a href="mailto:subhadip240420@gmail.com"
+                @if($hero['email'])
+                <a href="mailto:{{ $hero['email'] }}"
                     class="ml-4 inline-flex text-gray-700 bg-gray-100 py-2 px-6 hover:bg-gray-200 rounded text-lg">
-                    Contact Me
+                    {{ $hero['contact_label'] }}
                 </a>
+                @endif
             </div>
 
         </div>
