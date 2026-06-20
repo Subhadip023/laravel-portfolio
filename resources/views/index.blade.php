@@ -34,7 +34,7 @@
                 <a href="{{ route('projects') }}" class="inline-flex text-white bg-blue-500 py-2 px-6 hover:bg-blue-600 rounded text-lg">
                     View Projects
                 </a>
-                <a href="#contact"
+                <a href="mailto:subhadip240420@gmail.com"
                     class="ml-4 inline-flex text-gray-700 bg-gray-100 py-2 px-6 hover:bg-gray-200 rounded text-lg">
                     Contact Me
                 </a>
