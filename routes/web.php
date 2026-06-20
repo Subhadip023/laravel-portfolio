@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroSettingController;
+use App\Http\Controllers\SkillSettingController;
+use App\Http\Controllers\IconController;
+use App\Models\Icon;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +33,23 @@ Route::get('/', function () {
         'projects_label' => Setting::get('hero_projects_label', 'View Projects'),
         'contact_label'  => Setting::get('hero_contact_label', 'Contact Me'),
     ];
-    return view('index', compact('hero'));
+
+    $defaultCategories = [
+        ['name' => 'Backend Development',  'icon' => 'backend',  'items' => [['name'=>'PHP','pct'=>95],['name'=>'Laravel','pct'=>92],['name'=>'MySQL','pct'=>85],['name'=>'REST APIs','pct'=>88],['name'=>'SAML Auth','pct'=>75]]],
+        ['name' => 'Frontend Development', 'icon' => 'frontend', 'items' => [['name'=>'HTML & CSS','pct'=>90],['name'=>'JavaScript','pct'=>78],['name'=>'Alpine.js','pct'=>70],['name'=>'Tailwind CSS','pct'=>88],['name'=>'Blade Templates','pct'=>95]]],
+        ['name' => 'DevOps & Tooling',    'icon' => 'devops',   'items' => [['name'=>'Linux Server','pct'=>80],['name'=>'Git & GitHub','pct'=>88],['name'=>'AI Integration','pct'=>72],['name'=>'Docker (basics)','pct'=>60],['name'=>'Mentoring','pct'=>85]]],
+    ];
+
+    $rawCategories = Setting::get('skills_categories');
+    $skillCategories = $rawCategories ? json_decode($rawCategories, true) : $defaultCategories;
+
+    $rawTools = Setting::get('skills_tools', 'PHP,Laravel,MySQL,JavaScript,Tailwind CSS,Alpine.js,Linux,Git,GitHub,SAML Auth,Gen AI,REST API,Blade,Composer');
+    $skillTools = array_filter(array_map('trim', explode(',', $rawTools)));
+
+    // Load icons keyed by ID for fast lookup in blade
+    $iconMap = Icon::all()->keyBy('id');
+
+    return view('index', compact('hero', 'skillCategories', 'skillTools', 'iconMap'));
 })->name('home');
 
 Route::get('/blog', function (\Illuminate\Http\Request $request) {
@@ -105,6 +124,16 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Hero Section Settings
     Route::get('/hero', [HeroSettingController::class, 'edit'])->name('admin.hero.edit');
     Route::put('/hero', [HeroSettingController::class, 'update'])->name('admin.hero.update');
+
+    // Skills Settings
+    Route::get('/skills', [SkillSettingController::class, 'edit'])->name('admin.skills.edit');
+    Route::put('/skills', [SkillSettingController::class, 'update'])->name('admin.skills.update');
+
+    // Icon Library
+    Route::get('/icons', [IconController::class, 'index'])->name('admin.icons.index');
+    Route::post('/icons', [IconController::class, 'store'])->name('admin.icons.store');
+    Route::put('/icons/{icon}', [IconController::class, 'update'])->name('admin.icons.update');
+    Route::delete('/icons/{icon}', [IconController::class, 'destroy'])->name('admin.icons.destroy');
 });
 
 

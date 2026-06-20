@@ -88,6 +88,14 @@
                     <i class="fas fa-home w-5 text-center"></i>
                     Hero Section
                 </a>
+                <a href="{{ route('admin.skills.edit') }}" class="sidebar-item {{ request()->routeIs('admin.skills.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-chart-bar w-5 text-center"></i>
+                    Skills
+                </a>
+                <a href="{{ route('admin.icons.index') }}" class="sidebar-item {{ request()->routeIs('admin.icons.*') ? 'active' : '' }} flex items-center gap-3 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-indigo-600 transition-colors">
+                    <i class="fas fa-icons w-5 text-center"></i>
+                    Icon Library
+                </a>
             </nav>
 
             <div class="px-4 mt-8 mb-2">
