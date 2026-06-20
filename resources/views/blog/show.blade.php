@@ -2,6 +2,25 @@
 
 @section('title', $blog->title . ' | Subhadip Chakraborty')
 
+@section('seo')
+<meta name="description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
+@if($blog->tags && $blog->tags->count() > 0)
+<meta name="keywords" content="{{ $blog->tags->pluck('name')->implode(', ') }}">
+@endif
+{{-- Open Graph --}}
+<meta property="og:title" content="{{ $blog->title }}">
+<meta property="og:description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ url()->current() }}">
+@if($blog->image)
+<meta property="og:image" content="{{ Str::startsWith($blog->image, ['http://', 'https://']) ? $blog->image : asset('storage/' . $blog->image) }}">
+@endif
+{{-- Twitter Card --}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $blog->title }}">
+<meta name="twitter:description" content="{{ Str::limit(strip_tags($blog->content), 160) }}">
+@endsection
+
 @section('content')
 <main class="flex-grow pt-20 pb-20 min-h-screen">
     <section class="text-gray-600 body-font">
